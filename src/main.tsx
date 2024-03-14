@@ -6,14 +6,17 @@ import './utils/firebase'
 import Layer from './layer/Layer'
 import { AuthProvider } from './context/Auth/AuthContext'
 import { TaskProvider } from './context/task/TaskContext'
+import { DashboardProvider } from './context/Dashboard/DashboardContext'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <AuthProvider>
       <TaskProvider>
-        <Layer>
-          <App />
-        </Layer>
+        <DashboardProvider>
+          <Layer>
+            <App />
+          </Layer>
+        </DashboardProvider>
       </TaskProvider>
     </AuthProvider>
   </React.StrictMode>,
