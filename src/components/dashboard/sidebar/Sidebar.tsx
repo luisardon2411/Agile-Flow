@@ -2,7 +2,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAuth } from '../../../context/Auth/AuthContext';
 import { useTask } from '../../../context/task/TaskContext';
 import { motion } from 'framer-motion';
-import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRightFromBracket, faBullhorn } from '@fortawesome/free-solid-svg-icons';
+import { useDashboard } from '../../../context/Dashboard/DashboardContext';
 
 
 const Sidebar = () => {
@@ -10,6 +11,12 @@ const Sidebar = () => {
   const { signOut } = useAuth();
 
   const { state } = useTask();
+  const { actualPage, page } = useDashboard();
+
+
+  const handleActualPage = (page: string) => {
+    actualPage(page);
+  }
 
 
   return (
@@ -20,11 +27,11 @@ const Sidebar = () => {
           {
             state.taskLists && state.taskLists.length > 0 && (
               <>
-                <motion.div 
-                initial={{ opacity: 0, x: -100 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: .7, delay: 0.5, ease: 'easeInOut', type: 'tween' }}
-                className='flex flex-col lg:gap-2'>
+                <motion.div
+                  initial={{ opacity: 0, x: -100 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: .7, delay: 0.5, ease: 'easeInOut', type: 'tween' }}
+                  className='flex flex-col lg:gap-2'>
                   <h2 className='text-zinc-400 lg:text-sm'>Tareas</h2>
                   <hr />
                   {state.taskLists && state.taskLists.map((taskList) => (
@@ -54,21 +61,35 @@ const Sidebar = () => {
               </span>
             </motion.li>
           )}
-          <li>
-            <motion.span
-              initial={{ opacity: 0, y: 100 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: .5, delay: 0.5, ease: 'easeInOut', type: 'tween' }}
-
-              onClick={signOut}
-              className='flex items-center justify-between lg:p-4 rounded-lg mb-2 hover:bg-gray-200
-            cursor-pointer'>
+          <motion.div
+          initial={{ opacity: 0, y: 100 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: .5, delay: 0.5, ease: 'easeInOut', type: 'tween' }}
+          >
+            { /** Notificame */}
+            <li className={`flex items-center justify-between lg:p-4 rounded-lg mb-2 hover:bg-gray-200 cursor-pointer ${ page === 'Enviar mensaje' ? 'bg-gray-200' : '' } `}
+            onClick={ () => handleActualPage('Enviar mensaje') } >
               <div className='flex lg:gap-2'>
-                <FontAwesomeIcon icon={faArrowRightFromBracket} className='self-center lg:text-lg' />
-                <p className=''>Cerrar sesión</p>
+                <FontAwesomeIcon icon={faBullhorn} className='self-center lg:text-lg' />
+                <p className=''>Envia mensaje</p>
               </div>
-            </motion.span>
-          </li>
+            </li>
+            <li>
+              <motion.span
+                initial={{ opacity: 0, y: 100 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: .5, delay: 0.5, ease: 'easeInOut', type: 'tween' }}
+
+                onClick={signOut}
+                className='flex items-center justify-between lg:p-4 rounded-lg mb-2 hover:bg-gray-200
+            cursor-pointer'>
+                <div className='flex lg:gap-2'>
+                  <FontAwesomeIcon icon={faArrowRightFromBracket} className='self-center lg:text-lg' />
+                  <p className=''>Cerrar sesión</p>
+                </div>
+              </motion.span>
+            </li>
+          </motion.div>
         </ul>
       </section>
     </article>
