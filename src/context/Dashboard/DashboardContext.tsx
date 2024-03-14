@@ -4,6 +4,7 @@ export interface DashboardContextProps {
     page: string;
     isSidebarOpen: boolean;
     toggleSidebar: () => void;
+    actualPage: (page: string) => void;
 }
 
 
@@ -11,6 +12,7 @@ export const DashboardContext = createContext<DashboardContextProps>({
     page: 'home',
     isSidebarOpen: false,
     toggleSidebar: () => { },
+    actualPage: () => {}
 });
 
 export const useDashboard = () => {
