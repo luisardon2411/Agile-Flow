@@ -1,6 +1,6 @@
 import { useContext, createContext, useReducer, useCallback, useEffect } from "react";
 import { Action, State, initialState, tasksReducer } from "./interfaces/task.actions";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, or, query, where } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import { useAuth } from '../Auth/AuthContext';
 import { TaskList } from "./interfaces/Task.interface";
@@ -25,7 +25,12 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
 
     const getTaskList = useCallback( async () => {
         if (isAuhenticated && user) {
-            const queryRef = query(collection(db, 'taskList'), where('assignedTo', 'array-contains', user.uid));
+            const queryRef = query(collection(db, 'taskList'), 
+                or(
+                    where('isGlobal', '==', true),
+                    where('assignedTo', 'array-contains', user.uid)
+                )
+            );
             const querySnapshot = await getDocs(queryRef);
             const taskList: TaskList[] = [];
             querySnapshot.forEach((doc) => {
